@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {% block title %}ANPR SYSTEM{% endblock %}
+  </title>
+
+
+  {% block stylesheets %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+
+    <!-- Font Awesome Icons -->
+    <style>
+      .card {
+          margin-right:4px;
+      }
+  
+      .p-0 {
+      padding: 10px !important;
+  }
+      .card-header {
+          background-color: aliceblue;
+      }
+  
+      .card-header .card-title {
+          text-transform: uppercase;
+         
+      }
+      
+       .card-footer .btn {
+          margin: 13px 12px 12px 10px;  
+          float:right;
+       }
+  
+  
+  </style>
+
+  {% endblock stylesheets %}
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  {% include 'includes/navigation.html' %}
+
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-blue elevation-3">
+    {% include 'includes/sidebar.html' %}
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Main content -->
+    {% block content %}
+            
+    {% endblock content %} 
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  {% include 'includes/footer.html' %}
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+
+<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='dist/js/adminlte.min.js') }}"></script>
+
+  <!-- DataTables  & Plugins -->
+<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/validation.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <!-- DataTables scripts -->
+
+
+ <script>
+  $("#datatable").DataTable({
+    "paging": true,
+    "pagelength":10,
+    "lengthChange": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+  })
+ </script>
+ 
+<script>
+$(document).ready(function() {
+  // make AJAX call to fetch data from server
+  $.ajax({
+    url: '/dashboard',
+    type: 'GET',
+    success: function(data) {
+      // update page with new data
+      $('#vehicle-count').html(data.vehicleCount);
+      $('#access-count').html(data.accessCount);
+      $('#blacklist-count').html(data.blacklistCount);
+    },
+    error: function() {
+      console.log('Error fetching data from server');
+    }
+  });
+});
+</script>
+
+ <SCRipt>
+  function validateForm() {
+    var owner = document.forms["myForm"]["owner"].value;
+    var id_number = document.forms["myForm"]["id_number"].value;
+    var email = document.forms["myForm"]["email"].value;
+    var phone_number = document.forms["myForm"]["phone_number"].value;
+    var vehicle_name = document.forms["myForm"]["vehicle_name"].value;
+    var model = document.forms["myForm"]["model"].value;
+    var number_plate = document.forms["myForm"]["number_plate"].value;
+    var color = document.forms["myForm"]["color"].value;
+    var role = document.forms["myForm"]["role"].value;
+    var status = document.forms["myForm"]["status"].value;
+    console.log(formData.get('owner'));
+  
+    if (owner == "" || id_number == "" || email == "" || phone_number == "" || vehicle_name == "" || model == "" || number_plate == "" || color == "" || role == "" || status == "") {
+      alert("All fields must be filled out");
+      return false;
+    }
+    
+    // validate email format
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Invalid email format");
+      return false;
+    }
+    
+    // validate phone number format
+    var phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone_number)) {
+      alert("Invalid phone number format");
+      return false;
+    }
+    
+    // validate number plate format
+    var numberPlateRegex = /^[A-Z]{3}\d{4}$/;
+    if (!numberPlateRegex.test(number_plate)) {
+      alert("Invalid number plate format");
+      return false;
+    }
+  
+    return true;
+  }
+  
+ </SCRipt>
+
+
+</body>
+</html>
